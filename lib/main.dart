@@ -45,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage>   with SingleTickerProviderStat
   AnimationController controller;
   int _counter = 0;
   final myController = TextEditingController();
+  ScrollController _scrollController = new ScrollController();
 
 
   @override
@@ -68,13 +69,13 @@ print("KASS");
   saveData(){
     Message  m = l[l.length-1];
 
-    FirebaseFirestore.instance.enablePersistence();
+  //  FirebaseFirestore.instance.enablePersistence();
 
     Map<String, dynamic> map  = Map();
     map.putIfAbsent("message", () => m.text);
     map.putIfAbsent("size", () => m.fontSize);
 
-    FirebaseFirestore.instance.collection('messages').doc(DateTime.now().toIso8601String()).set(map);
+    //FirebaseFirestore.instance.collection('messages').doc(DateTime.now().toIso8601String()).set(map);
 
 
   }
@@ -98,6 +99,7 @@ String text = "";
 
         Flexible(
           child: ListView.builder(
+            controller: _scrollController,
 
             padding: EdgeInsets.all(8.0),
             reverse: false, //To keep the latest messages at the bottom
@@ -164,6 +166,7 @@ String text = "";
                l.add(m);
                print("SSS");
 
+               _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
 
                myController.text = "";
                setState(() {
